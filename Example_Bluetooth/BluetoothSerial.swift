@@ -22,7 +22,7 @@ extension BluetoothSerialDelegate {
 // 블루투스 통신을 담당할 시리얼을 클래스로 선언, CoreBluetooth를 사용하기 위한 프토토콜 추가
 class BluetoothSerial: NSObject {
     
-    static let shared = BluetoothSerial()
+    static let shared = BluetoothSerial() // 싱글톤으로 적용 코드 최적화
     
     private override init() {
         super.init()
