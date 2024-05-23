@@ -12,11 +12,13 @@ import CoreBluetooth
 protocol BluetoothSerialDelegate: AnyObject {
     func serialDidDiscoverPeripheral(peripheral: CBPeripheral, RSSI: NSNumber?)
     func serialDidConnectPeripheral(peripheral: CBPeripheral)
+    func serialDidReceiveMessage(message: String)
 }
 
 extension BluetoothSerialDelegate {
     func serialDidDiscoverPeripheral(peripheral: CBPeripheral, RSSI: NSNumber?) { }
     func serialDidConnectPeripheral(peripheral: CBPeripheral) { }
+    func serialDidReceiveMessage(message: String) { }
 }
 
 // 블루투스 통신을 담당할 시리얼을 클래스로 선언, CoreBluetooth를 사용하기 위한 프토토콜 추가
@@ -54,6 +56,11 @@ class BluetoothSerial: NSObject {
     
     // characteristicUUID는 serviceUUID에 포함되어있음, 이를 이용하여 데이터를 송수신, FFE0 서비스가 갖고있는 FFE1으로 설정, 하나의 service는 여러개의 characteristicUUID를 가질 수 있음
     var characteristicUUID = CBUUID(string: "FFE1")
+    
+    // 블루투스가 준비되었는지 확인하는 계산 속성
+    var bluetoothIsReady: Bool {
+        return centralManager.state == .poweredOn && connectedPeripheral != nil && writeCharacteristic != nil
+    }
   
 
     /// 기기 검색 시작, 연결이 가능한 모든 주변기기를 serviceUUID를 통해 찾기
@@ -85,11 +92,49 @@ class BluetoothSerial: NSObject {
         centralManager.connect(peripheral, options: nil)
     }
     
+    /// String 형식으로 데이터를 주변기기에 전송
+    func sendMessageToDevice(_ message: String) {
+        guard bluetoothIsReady else { return }
+        
+        // String을 utf8 형식의 데이터로 변환
+        if let data = message.data(using: String.Encoding.utf8) {
+            connectedPeripheral?.writeValue(data, for: writeCharacteristic!, type: writeType)
+        }
+    }
+    
+    
+    /// 데이터 Array를 Byte 형식으로 주변기기에 전송
+    func sendBytesTiDevice(_ bytes: [UInt8]) {
+        guard bluetoothIsReady else { return }
+        
+        let data = Data(bytes)
+        connectedPeripheral!.writeValue(data, for: writeCharacteristic!, type: writeType)
+    }
+    
+    /// 데이터를 주변기기에 전송
+    func sendDataToDevice(_ data: Data) {
+        guard bluetoothIsReady else { return }
+        connectedPeripheral!.writeValue(data, for: writeCharacteristic!, type: writeType)
+    }
 
     
 }
 
 extension  BluetoothSerial : CBCentralManagerDelegate, CBPeripheralDelegate {
+    
+    /// peripheral 으로부터 데이터를 전송 받으면 호출되는 메서드
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        // 전송받은 데이터가 존재하는지 확인
+        let data = characteristic.value
+        guard data != nil else { return }
+        
+        // 데이터를 String으로 변환하고, 변환된 값을 파라미터로 한 delegate 함수를 호출합니다.
+        if let str = String(data: data!, encoding: .utf8) {
+            delegate?.serialDidReceiveMessage(message: str)
+        } else {
+            return
+        }
+    }
 
     
     /// central 기기의 블루투스가 켜져있는지, 꺼져있는지에 대한 상태가 변할때 마다 호출

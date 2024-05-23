@@ -12,7 +12,14 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
     
     lazy var scanButton: UIButton = {
        let button = UIButton()
-        button.setTitle("스킨", for: .normal)
+        button.setTitle("스캔", for: .normal)
+        button.setTitleColor(.blue, for: .normal)
+        return button
+    }()
+    
+    lazy var sendMessageButton: UIButton = {
+       let button = UIButton()
+        button.setTitle("데이터 통신 버튼", for: .normal)
         button.setTitleColor(.blue, for: .normal)
         return button
     }()
