@@ -68,7 +68,7 @@ class BluetoothSerial: NSObject {
         guard centralManager.state == .poweredOn else { return }
         
         // 연결 가능한 기기를 검색, withService 파라미터에 nil을 입력하면 모든 종류의 기기 검색
-        centralManager.scanForPeripherals(withServices: [serviceUUID], options: nil)
+        centralManager.scanForPeripherals(withServices: nil, options: nil)
         
         // 특정 serviceUUID를 가진 주변 기기를 검색하여 반환
         let peripherals = centralManager.retrieveConnectedPeripherals(withServices: [serviceUUID])
@@ -162,10 +162,13 @@ extension  BluetoothSerial : CBCentralManagerDelegate, CBPeripheralDelegate {
 
          // 신호 강도 필터링 (예: -70dBm 이상인 경우)
          if RSSI.intValue > -70 {
-             print("Discovered peripheral: \(peripheral.name ?? "Unknown") at RSSI: \(RSSI)")
-             delegate?.serialDidDiscoverPeripheral(peripheral: peripheral, RSSI: RSSI)
+             if let name = peripheral.name {
+                 print("Discovered peripheral: \(name) at RSSI: \(RSSI)")
+                 delegate?.serialDidDiscoverPeripheral(peripheral: peripheral, RSSI: RSSI)
+             }
+             
          } else {
-             print("Peripheral RSSI too low: \(RSSI)")
+//             print("Peripheral RSSI too low: \(RSSI)")
          }
          
     }

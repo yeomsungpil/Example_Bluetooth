@@ -16,6 +16,7 @@
 		4D0851942BFDD49C0077D21B /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0851932BFDD49C0077D21B /* ScanViewController.swift */; };
 		4D0851972BFDD6B00077D21B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4D0851962BFDD6B00077D21B /* SnapKit */; };
 		4D0851992BFDD7680077D21B /* ScanTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0851982BFDD7670077D21B /* ScanTableCell.swift */; };
+		4D8BAB842BFF206F00BB26FD /* PeripheralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8BAB832BFF206F00BB26FD /* PeripheralViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,7 @@
 		4D0851912BFDC8220077D21B /* BluetoothSerial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothSerial.swift; sourceTree = "<group>"; };
 		4D0851932BFDD49C0077D21B /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		4D0851982BFDD7670077D21B /* ScanTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanTableCell.swift; sourceTree = "<group>"; };
+		4D8BAB832BFF206F00BB26FD /* PeripheralViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PeripheralViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				4D0851932BFDD49C0077D21B /* ScanViewController.swift */,
 				4D0851982BFDD7670077D21B /* ScanTableCell.swift */,
 				4D0851912BFDC8220077D21B /* BluetoothSerial.swift */,
+				4D8BAB832BFF206F00BB26FD /* PeripheralViewController.swift */,
 				4D0851862BFDC7920077D21B /* Assets.xcassets */,
 				4D0851882BFDC7920077D21B /* LaunchScreen.storyboard */,
 				4D08518B2BFDC7920077D21B /* Info.plist */,
@@ -154,6 +157,7 @@
 				4D0851822BFDC7910077D21B /* ViewController.swift in Sources */,
 				4D08517E2BFDC7910077D21B /* AppDelegate.swift in Sources */,
 				4D0851942BFDD49C0077D21B /* ScanViewController.swift in Sources */,
+				4D8BAB842BFF206F00BB26FD /* PeripheralViewController.swift in Sources */,
 				4D0851922BFDC8220077D21B /* BluetoothSerial.swift in Sources */,
 				4D0851802BFDC7910077D21B /* SceneDelegate.swift in Sources */,
 				4D0851992BFDD7680077D21B /* ScanTableCell.swift in Sources */,

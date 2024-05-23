@@ -11,7 +11,7 @@ import CoreBluetooth
 class ScanViewController: UIViewController {
     
     lazy var tableView: UITableView = {
-       let tableView = UITableView()
+        let tableView = UITableView()
         tableView.register(ScanTableCell.self, forCellReuseIdentifier: ScanTableCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
@@ -49,8 +49,9 @@ class ScanViewController: UIViewController {
 extension ScanViewController: BluetoothSerialDelegate {
     func serialDidConnectPeripheral(peripheral: CBPeripheral) {
         let connetSuccessAlert = UIAlertController(title: "블루투스 연결 성공", message: "\(peripheral.name ?? "")와 성공적으로 연결되었습니다.", preferredStyle: .alert)
+        
         let confirm = UIAlertAction(title: "확인", style: .default) { _ in
-            self.dismiss(animated: true)
+            print("연결 정보", peripheral.name ?? "", peripheral.description, peripheral.canSendWriteWithoutResponse)
         }
         connetSuccessAlert.addAction(confirm)
         present(connetSuccessAlert, animated: true)
@@ -72,6 +73,10 @@ extension ScanViewController: BluetoothSerialDelegate {
         tableView.reloadData()
     }
     
+    func serialDidReceiveMessage(message: String) {
+        print("Received message: \(message)")
+    }
+    
 }
 
 extension ScanViewController: UITableViewDelegate, UITableViewDataSource {
@@ -83,7 +88,9 @@ extension ScanViewController: UITableViewDelegate, UITableViewDataSource {
         BluetoothSerial.shared.stopScan()
         let selectedPeripheral = peripheralList[indexPath.row].peripheral
         // serial의 connectToperipeheral 함수에 선택된 peripheral을 연결하도록 요청
+       
         BluetoothSerial.shared.connectToPeripheral(selectedPeripheral)
+        print("선택된 블루투스 기기 : \(selectedPeripheral)")
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -94,12 +101,14 @@ extension ScanViewController: UITableViewDelegate, UITableViewDataSource {
         // ScanCell
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ScanTableCell.identifier, for: indexPath) as? ScanTableCell else { return UITableViewCell() }
         let data = peripheralList[indexPath.row].peripheral.name
-        if let data {
-            if data != "unknown" {
-                cell.setup(data: data)
-            }
+        
+        if let data, data != "unknown" {
+            cell.setup(data: data)
+            return cell
+        } else {
+            let emptyCell = UITableViewCell()
+            emptyCell.isHidden = true
+            return emptyCell
         }
-        return cell
     }
-    
 }
